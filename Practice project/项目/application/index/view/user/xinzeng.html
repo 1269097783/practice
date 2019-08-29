@@ -1,0 +1,135 @@
+<!DOCTYPE>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>车位管理系统</title>
+<link rel="stylesheet" type="text/css" href="__STATIC__ /css/index.css" />
+<script src="https://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+</head>
+<body class="bodybg01">
+<div id="content">
+  <table width="100%" class="a01">
+    <tr>
+      <td width="8%" style="text-align:right;">当前位置：</td>
+      <td width="3%">首页</td>
+      <td width="1%">&gt;</td>
+      <td width="6%"><a href="#">管理员管理</a></td>
+      <td width="1%">&gt;</td>
+      <td>管理员新增 </td>
+    </tr>
+  </table>
+  <table width="100%" class="a02">
+    <tr>
+      <td width="5%" style="text-align:right;"><img src="__STATIC__ /images/tubiao.jpg" alt=" " /></td>
+      <td width="1%">&nbsp;</td>
+      <td width="94%"><strong>设备分组管理新增</strong></td>
+    </tr>
+  </table>
+  <div class="shdlr">
+  <form action="tjiao" method="post">
+    <table width="100%" class="a03">
+	<tr>
+        <td style="text-align:right;">用户名：</td>
+        <td><input type="text" name="user" class="a09" placeholder="用户名长度为5-20" /></td>
+        <td style="text-align:right;">&nbsp;</td>
+      </tr>
+	<tr>
+        <td style="text-align:right;">密码：</td>
+        <td><input type="password" name="password" class="a09" placeholder="密码长度为5-20"/></td>
+        <td style="text-align:right;">&nbsp;</td>
+      </tr>
+      <tr>
+        <td style="text-align:right;">电话：</td>
+        <td><input type="text" name="phone" class="a09" placeholder="请填写正确手机号" /></td>
+        <td style="text-align:right;">&nbsp;</td>
+      </tr>
+       <tr>
+        <td style="text-align:right;">姓名：</td>
+        <td><input type="text" name="xingming" class="a09" placeholder="请填写姓名" /></td>
+        <td style="text-align:right;">&nbsp;</td>
+      </tr>
+      
+    </table>
+	
+	<table width="100%" style="margin-bottom:20px;">
+      <tr>
+        <td width="15%">&nbsp;</td>
+        <td width="10%"><a><button style="width:166px;height:36px;font-size:20px;background-color:#60A806;color:#fff;border:0px;">添&nbsp&nbsp&nbsp&nbsp加</button></a></td>
+        <td width="10%"><div style="width:166px;height:36px;font-size:20px;background-color:#60A806;color:#fff;border:0px;text-align:center;"><a href="user">取消返回</a></div></td>
+        <td width="65%">&nbsp;</td>
+      </tr>
+    </table>
+  </form>
+  </div>
+</div>
+</body>
+<script>
+  $(function(){
+    user=pwd=phone=xm=false;
+    //判断用户名是否合法，是否被注册
+    $('input:eq(0)').blur(function(){
+      if($(this).val().length>4 && $(this).val().length<21){
+        $.ajax({
+          url:"/pduser",
+          type:"post",
+          data:{user:$('input:eq(0)').val()},
+          dataType:"json",
+          success:function(data){
+            if(data.code==1){
+              user=false;
+              $('input:eq(0)').val('');
+              $('input:eq(0)').attr('placeholder','用户名已经被注册');
+            }else{
+              user=true;
+            }
+          }
+        })
+      }else{
+        user=false;
+        $('input:eq(0)').attr('placeholder','用户名长度为5-20');
+        $('input:eq(0)').val('');
+      }
+    })
+    //判断密码是否合法
+    $('input:eq(1)').blur(function(){
+      if($(this).val().length>4 && $(this).val().length<21){
+        pwd=true;
+      }else{
+        pwd=false;
+        $('input:eq(1)').attr('placeholder','密码长度为5-20');
+        $('input:eq(1)').val('');
+      }
+    })
+    //判断手机号码是否合法/^1[34578]\d{9}$/
+     $('input:eq(2)').blur(function(){
+      var pddh=/^1[34578]\d{9}$/;
+      if($(this).val().match(pddh)!=null){
+        phone=true;
+      }else{
+        phone=false;
+        $('input:eq(2)').attr('placeholder','请填写正确手机号');
+        $('input:eq(2)').val('');
+      }
+    })
+    //判断姓名是否填写
+    $('input:eq(3)').blur(function(){
+    if($(this).val().length>0){
+      xm=true;
+    }else{
+      xm=false;
+      $('input:eq(3)').attr('placeholder','请填写姓名');
+      $('input:eq(3)').val('');
+    }
+  })
+    // 点击提交判断是否可以提交
+  $('button').click(function(e){
+     if(user && pwd && phone && xm){
+      $('form').submit()
+     }else{
+      e.preventDefault()
+     }
+   })
+
+  })
+</script>
+</html>

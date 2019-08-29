@@ -1,0 +1,219 @@
+<!DOCTYPE>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>车位管理系统</title>
+<link rel="stylesheet" type="text/css" href="__STATIC__ /css/index.css" />
+<script src="https://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+</head>
+<body class="bodybg01">
+<div id="content">
+  <table width="100%" class="a01">
+    <tr>
+      <td width="8%" style="text-align:right;">当前位置：</td>
+      <td width="3%">首页</td>
+      <td width="1%">&gt;</td>
+      <td width="6%"><a href="#">住户管理</a></td>
+      <td width="1%">&gt;</td>
+      <td>住户新增 </td>
+    </tr>
+  </table>
+  <table width="100%" class="a02">
+    <tr>
+      <td width="5%" style="text-align:right;"><img src="__STATIC__ /images/tubiao.jpg" alt=" " /></td>
+      <td width="1%">&nbsp;</td>
+      <td width="94%"><strong>住户新增管理</strong></td>
+    </tr>
+  </table>
+  <div class="shdlr">
+  <form action="{:url('/vip/xiougai')}" method="post">
+    <table width="100%" class="a03">
+	<tr>
+        <td style="text-align:right;">门牌号：</td>
+        <td>
+          <select name="qu" >
+            <option value="0">区</option>
+            {volist name='res' id='res'}
+              {if condition="$res.name==$data.qu"}
+                <option value="{$res.id}" selected>{$res.name}</option>
+              {else /}
+                <option value="{$res.id}" >{$res.name}</option>
+              {/if}
+            {/volist}
+          </select>
+          <select name="danyuan" >
+            <option value="0">单元</option>
+             {volist name='ress' id='ress'}
+              {if condition="$ress.name==$data.danyuan"}
+                <option value="{$ress.id}" selected>{$ress.name}</option>
+              {else /}
+                <option value="{$ress.id}" >{$ress.name}</option>
+              {/if}
+            {/volist}
+          </select>
+          <input type="text" name="menpai" placeholder="填写门牌号" value="{$data.menpai}">
+        </td>
+        <td style="text-align:right;">&nbsp;</td>
+      </tr>
+	<tr>
+        <td style="text-align:right;">住户名：</td>
+        <td><input type="text" name="name" class="a09" value="{$data.name}"/></td>
+        <td style="text-align:right;">&nbsp;</td>
+        <input type="text" name="id" value="{$data.id}" hidden>
+      </tr>
+
+      <tr>
+        <td style="text-align:right;">电话号码：</td>
+        <td><input type="text" name="phone" class="a09" value="{$data.phone}"/></td>
+        <td style="text-align:right;">&nbsp;</td>
+      </tr>
+      <tr>
+        <td style="text-align:right;">车牌号码：</td>
+        <td><input type="text" name="chepai" class="a09" value="{$data.chepai}"/></td>
+        <td style="text-align:right;">&nbsp;</td>
+      </tr>
+      <tr>
+        <td style="text-align:right;">已购车位：</td>
+        <td>
+          <select name="chewei" >
+            <option value="0">车位</option>
+            {volist name='dat' id='dat'}
+              {if condition="$dat.name==$data.chewei"}
+                <option value="{$dat.id}" selected>{$dat.name}</option>
+              {else /}
+                <option value="{$dat.id}" >{$dat.name}</option>
+              {/if}
+            {/volist}
+          </select>
+        </td>
+        <td style="text-align:right;">&nbsp;</td>
+      </tr>
+    </table>
+	
+	<table width="100%" style="margin-bottom:20px;">
+      <tr>
+        <td width="15%">&nbsp;</td>
+        <td width="10%"><a><button style="width:166px;height:36px;font-size:20px;background-color:#60A806;color:#fff;border:0px;">修&nbsp&nbsp&nbsp&nbsp改</button></a></td>
+        <td width="10%"><div style="width:166px;height:36px;font-size:20px;background-color:#60A806;color:#fff;border:0px;text-align:center;"><a href="{:url('/vip/index')}">取消返回</a></div></td>
+        <td width="65%">&nbsp;</td>
+      </tr>
+    </table>
+  </form>
+  </div>
+</div>
+</body>
+<script>
+  $(function(){
+    xingming=qu=danyuan=zhuhu=dianhua=true;
+    //联动遍历单元
+    $('select[name=qu]').change(function(){
+      if(($('select[name=qu]').val())!='0'){
+        qu=true;
+        $.ajax({
+          url:"{:url('/vip/danyuan')}",
+          type:"get",
+          data:{pid:$('select[name=qu]').val()},
+          dataType:"json",
+          success:function(data){
+              $("select[name=chewei]").children('option').remove()
+              $('select[name=chewei]').append('<option value="0">车位</option>')
+             $("select[name=danyuan]").children('option').remove()
+             $('select[name=danyuan]').append('<option value="0">单元</option>')
+            for(var i=0;i<data.length;i++){
+              var opt=$("<option value='"+data[i]['id']+"'>"+data[i]['name']+"</option>")
+              $("select[name=danyuan]").append(opt);
+            }
+
+
+            $('select[name=danyuan]').change(function(){
+              if(($('select[name=danyuan]').val())!='0'){
+              danyuan=true;
+              $.ajax({
+                url:"{:url('/vip/chewei')}",
+                type:"get",
+                data:{pid:$('select[name=danyuan]').val()},
+                dataType:"json",
+                success:function(data){
+                  $("select[name=chewei]").children('option').remove()
+                  $('select[name=chewei]').append('<option value="0">车位</option>')
+                for(var i=0;i<data.length;i++){
+                  var opt=$("<option value='"+data[i]['id']+"'>"+data[i]['name']+"</option>")
+                  $("select[name=chewei]").append(opt);
+                }
+                }
+                })
+              }else{
+                danyuan=false;
+                $("select[name=chewei]").children('option').remove();
+                $("select[name=chewei]").append("<option >车位</option>") ; 
+              }
+            })
+
+
+          }
+        })
+      }else{
+        qu=false;
+        danyuan=false;
+        $("select[name=danyuan]").children('option').remove();
+        $("select[name=chewei]").children('option').remove();
+        $("select[name=danyuan]").append("<option >单元</option>");
+        $("select[name=chewei]").append("<option >车位</option>") ; 
+      }
+    })
+    //门牌号判断
+    $('input[name=menpai]').blur(function(){
+      var pd=/^[0-9]{4}$/;
+      if($(this).val().match(pd)==null){
+        zhuhu=false;
+        $(this).attr('placeholder','请填写正确门牌号');
+        $(this).val('');
+      }else{
+        zhuhu=true;
+      }
+    })
+    //电话号码判断/^1[34578]\d{9}$/
+    $('input[name=phone]').blur(function(){
+      var phon=/^1[34578]\d{9}$/;
+      if($(this).val().match(phon)==null){
+        dianhua=false;
+        $(this).attr('placeholder','请填写正确电话号码');
+        $(this).val('');
+      }else{
+        dianhua=true;
+      }
+    })
+    //车牌号判断/^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}[A-Z0-9]{4}[A-Z0-9挂学警港澳]{1}$/
+    $('input[name=chepai]').blur(function(){
+      var che=/^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}[.]{1}[D]{0,1}[A-Z0-9]{4}[A-Z0-9挂学警港澳]{1}$/;
+      if($(this).val().match(che)==null){
+        $(this).attr('placeholder','请填写正确车牌号码');
+        $(this).val('');
+      }
+    })
+    //姓名是否为空
+     $('input[name=name]').blur(function(){
+      if($(this).val()==null){
+        xingming=false;
+        $(this).attr('placeholder','请填写姓名');
+        $(this).val('');
+      }else{
+        xingming=true;
+      }
+    })
+    //点击判断提交
+    $('button').click(function(e){
+      console.log(qu);
+      console.log(zhuhu);
+      console.log(dianhua);
+      console.log(xingming);
+         if(qu && zhuhu && dianhua && xingming && danyuan){
+          $('form').submit();
+         }else{
+          e.preventDefault();
+         }
+       })
+
+  })
+</script>
+</html>

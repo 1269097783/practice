@@ -1,0 +1,82 @@
+<!DOCTYPE>
+<html >
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>车位管理系统</title>
+<link rel="stylesheet" type="text/css" href="__STATIC__ /css/index.css" />
+<script src="https://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+</head>
+<body class="bodybg01">
+<div id="content">
+  <table width="100%" class="a01">
+    <tr>
+      <td width="8%" style="text-align:right;">当前位置：</td>
+      <td width="3%">首页</td>
+      <td width="1%">&gt;</td>
+      <td width="6%"><a href="#">管理员管理</a></td>
+      <td width="1%">&gt;</td>
+      <td>管理员操作 </td>
+    </tr>
+  </table>
+  <form action="" method="post" id="form1"></form>
+  <form action="{:url('/vip/index')}" method="get" id="form2"></form>
+  <table width="100%" class="a06" >
+    <tr>
+      <td width="25">&nbsp;</td>
+      <td width="63"></td>
+      <td width="65"><a href="{:url('/vip/xzyh')}"><img src="__STATIC__ /images/xinzeng.jpg" alt=" " /></a></td>
+      <td></td>
+      <td width="134"><input name="tiaojian" type="text" placeholder="姓名或电话号码" class="a08" form="form2"/></td>
+      <td width="166"><input type="submit" form="form2" value="搜索"></td>
+    </tr>
+  </table>
+  <div class="shdlr">
+    <table width="100%" class="a08">
+      <tr>
+        <th width="15%">门牌号</th>
+        <th width="10%">住户</th>
+        <th width="12%">联系电话</th>
+        <th width="12%">车牌号</th>
+        <th width="13%">已购车位</th>
+        <th width="18%">停车车位</th>
+        <th width="20%">操作</th>
+      </tr>
+      {volist name='data' id='vo'}
+      <tr>
+        <td class="a13 xd" >{$vo.dizhi}</td>
+        <td class="a13" >{$vo.name}</td>
+        <td class="a13" >{$vo.phone}</td>
+        <td class="a13" >{$vo.chepai}</td>
+        <td class="a13">{$vo.ygcw}</td>
+        <td class="a13"></td>
+        <td class="a13"><a href="/vip/xg/id/{$vo.id}">修改</a></td>
+      </tr>
+      {/volist}
+    </table>
+<table width="100%" class="qx">
+  <tr>
+    <td width="4%" style="text-align:center;"></td>
+    <td width="4%"></td>
+    <td width="32%">&nbsp;</td>
+    <td style="font-size:20px;">
+     {php}
+    $a=($link['page']-1)>0?($link['page']-1):1;
+    $b=($link['page']+1)<$link['zong']?($link['page']+1):$link['zong'];
+    {/php}
+      {if condition="($link['zong']>1)"}
+        <a href="?page={$a}">上一页</a>
+        <a href="?page={$b}">下一页</a>
+        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+        第{$link['page']}页
+        共{$link['zong']}页
+      {/if}
+    </td>
+    </tr>
+</table>
+  </div>
+</div>
+</body>
+<script>
+
+</script>
+</html>

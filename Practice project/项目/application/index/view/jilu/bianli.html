@@ -1,0 +1,87 @@
+<!DOCTYPE>
+<html >
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>车位管理系统</title>
+<link rel="stylesheet" type="text/css" href="__STATIC__ /css/index.css" />
+<script src="https://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+</head>
+<body class="bodybg01">
+<div id="content">
+  <table width="100%" class="a01">
+    <tr>
+      <td width="8%" style="text-align:right;">当前位置：</td>
+      <td width="3%">缴费</td>
+      <td width="1%">&gt;</td>
+      <td width="6%"><a href="#">收费记录</a></td>
+      <td width="1%">&gt;</td>
+      <td>记录查看</td>
+    </tr>
+  </table>
+  <form action="{:url('/jilu/index')}" method="get" id="form2"></form>
+  <table width="100%" class="a06" >
+    <tr>
+      <td width="25">&nbsp;</td>
+      <td width="63"></td>
+      <td width="65"></td>
+      <td></td>
+      <td width="134"><input name="tiaojian" type="text" placeholder="收费项目" class="a08" form="form2"/></td>
+      <td width="166"><input type="submit" form="form2" value="搜索"></td>
+    </tr>
+  </table>
+  <div class="shdlr">
+    <table width="100%" class="a08">
+      <tr>
+        <th width="20%"  class="xd">用户</th>
+        <th width="20%">缴费项目</th>
+        <th width="20%">缴费金额</th>
+        <th width="20%">缴费时间</th>
+        <th width="20%">收费人员</th>
+      </tr>
+      {volist name="data" id="vo"}
+      <tr>
+        <td class="a13">{if condition="!empty($vo.dizhi)"}{$vo.dizhi}{else /}零时停车用户{/if}</td>
+        <td class="a13">{$vo.name}</td>
+        <td class="a13">￥:{$vo.money}</td>
+        <td class="a13">{$vo.date}</td>
+        <td class="a13">{$vo.user}</td>
+      </tr>
+      {/volist}
+    </table>
+<table width="100%" class="qx">
+  <tr>
+    <td width="4%" style="text-align:center;"></td>
+    <td width="4%"></td>
+    <td width="32%">&nbsp;</td>
+    <td style="font-size:20px;">
+     {php}
+    $a=($link['page']-1)>0?($link['page']-1):1;
+    $b=($link['page']+1)<$link['zong']?($link['page']+1):$link['zong'];
+    {/php}
+      {if condition="($link['zong']>1)"}
+        <a href="?page={$a}">上一页</a>
+        <a href="?page={$b}">下一页</a>
+        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+        第{$link['page']}页
+        共{$link['zong']}页
+      {/if}
+    </td>
+    <td style="font-size:20px;">
+    </td>
+    </tr>
+</table>
+  </div>
+</div>
+</body>
+<script>
+$(function(){
+  $('span:eq(0)').click(function(){
+    if($('input[type="checkbox"]').prop('checked')){
+      $('input[type="checkbox"]').prop('checked',false);
+    }else{
+      $('input[type="checkbox"]').prop('checked',true);
+    }
+  })
+})
+</script>
+</html>

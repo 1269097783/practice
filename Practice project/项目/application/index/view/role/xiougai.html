@@ -1,0 +1,96 @@
+<!DOCTYPE>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf8" />
+<title>车位管理系统</title>
+<link rel="stylesheet" type="text/css" href="__STATIC__ /css/index.css" />
+<script src="https://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+</head>
+<body class="bodybg01">
+<div id="content">
+  <table width="100%" class="a01">
+    <tr>
+      <td width="8%" style="text-align:right;">当前位置：</td>
+      <td width="5%">权限管理</td>
+      <td width="1%">&gt;</td>
+      <td width="5%">职位管理</td>
+      <td width="1%">&gt;</td>
+      <td>职位添加</td>
+    </tr>
+  </table>
+  <table width="100%" class="a02">
+    <tr>
+      <td width="5%" height="25" style="text-align:right;"><img src="__STATIC__ /images/tubiao.jpg" alt=" " /></td>
+      <td width="1%" height="25">&nbsp;</td>
+      <td width="94%" height="25"><strong>职位管理新增</strong></td>
+    </tr>
+  </table>
+  <form action="{:url('/role/xioug')}" method="post">
+  <div class="shdlr">
+    <table width="100%" class="a03">
+      <tr>
+        <td style="text-align:right;">职位名：</td>
+        <td><input type="text" name="name" class="a09" required value="{$role}" /></td>
+        <td style="text-align:right;">&nbsp;</td>
+      </tr>
+      <tr>
+        <td style="text-align:right;">权限添加：</td>
+      </tr>
+      {volist name="data" id="vo" }
+      <tr>
+        <td width="11%" style="text-align:right; padding-right:5px;"><a title="点击全选" name="dianji">{$key}</a></td>
+        <td colspan="3">
+          {volist name="$vo" id="v"}
+          <input type="checkbox" name="nid[]" value="{$v.id}" {if condition="in_array($v.id,$nid)"}checked{/if} />{$v.cname}
+          {/volist}
+        
+        </td>
+      </tr>
+      {/volist}
+      <input type="hidden" name="rid" value="{$rid}" >
+    </table>
+    <table width="100%" style="margin-bottom:20px;">
+      <tr>
+        <td width="15%">&nbsp;</td>
+        <td width="10%"><a><button style="width:166px;height:36px;font-size:20px;background-color:#60A806;color:#fff;border:0px;">修&nbsp&nbsp&nbsp&nbsp改</button></a></td>
+        <td width="10%"><div style="width:166px;height:36px;font-size:20px;background-color:#60A806;color:#fff;border:0px;text-align:center;"><a href="{:url('/role/index')}">取消返回</a></div></td>
+        <td width="65%">&nbsp;</td>
+      </tr>
+    </table>
+  </div>
+  </form>
+</div>
+<script>
+  $(function(){
+
+    //判断职位名是否存在
+    $('input[name=name]').blur(function(){
+      if($(this).val()!='{$role}'){
+        if($(this).val()!=''){
+          $.ajax({
+            url:"{:url('/role/pdname')}",
+            type:"post",
+            data:{name:$('input[name=name]').val()},
+            dataType:"json",
+            success:function(data){
+              if(data.code==1){
+                alert('该职位已经存在')
+                $('input[name=name]').val('{$role}')
+              }
+            }
+          })
+        }
+      }
+      
+    })
+    //点击全选
+    $('a[name=dianji]').click(function(){
+      $(this).parent('td').next().children('input').prop('checked',false)
+      $(this).parent('td').next().children('input').prop('checked',true)
+    })
+
+
+  })
+</script>
+</body>
+</html>

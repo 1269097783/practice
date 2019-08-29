@@ -1,0 +1,86 @@
+<!DOCTYPE>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>车位管理系统</title>
+<link rel="stylesheet" type="text/css" href="__STATIC__ /css/index.css" />
+<script src="https://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+</head>
+<body class="bodybg01">
+<div id="content">
+  <table width="100%" class="a01">
+    <tr>
+      <td width="8%" style="text-align:right;">当前位置：</td>
+      <td width="3%">首页</td>
+      <td width="1%">&gt;</td>
+      <td width="6%"><a href="#">车辆出库</a></td>
+      <td width="1%">&gt;</td>
+      <td>车辆出库</td>
+    </tr>
+  </table>
+  <table width="100%" class="a02">
+    <tr>
+      <td width="5%" style="text-align:right;"><img src="__STATIC__ /images/tubiao.jpg" alt=" " /></td>
+      <td width="1%">&nbsp;</td>
+      <td width="94%"><strong>车辆出库</strong></td>
+    </tr>
+  </table>
+  <div class="shdlr">
+  <form action="{:url('/chuku/cha')}" method="post">
+    <table width="100%" class="a03">
+	<tr>
+        <td style="text-align:right;">请输入车牌号：</td>
+        <td><input type="text" name="chepai" class="a09" placeholder="请填写正确车牌号码" /></td>
+        <td style="text-align:right;">&nbsp;</td>
+  </tr>
+	<table width="100%" style="margin-bottom:20px;">
+      <tr>
+        <td width="35%">&nbsp;</td>
+        <td width="10%"><a><button style="width:166px;height:36px;font-size:20px;background-color:#60A806;color:#fff;border:0px;">出&nbsp&nbsp&nbsp&nbsp库</button></a></td>
+        <td width="65%">&nbsp;</td>
+      </tr>
+    </table>
+  </form>
+  </div>
+</div>
+</body>
+<script>
+  $(function(){
+    chepai=false;
+    //判断用户名是否合法，是否被注册
+    $('input:eq(0)').change(function(){
+      //车牌号判断/^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}[.]{1}[D]{0,1}[A-Z0-9]{4}[A-Z0-9挂学警港澳]{1}$/;
+      var che=/^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}[.]{1}[D]{0,1}[A-Z0-9]{4}[A-Z0-9挂学警港澳]{1}$/;
+      if($(this).val().match(che)==null){
+        $(this).attr('placeholder','请填写正确车牌号码');
+        $(this).val('');
+        chepai=false;
+      }else{
+        chepai=true;
+        $.ajax({
+          url:"{:url('/chuku/xianxing')}",
+          type:"post",
+          data:{chepai:$('input[name=chepai]').val()},
+          dataType:"json",
+          success:function(data){
+            if(data.code==1){
+              alert('车牌限行，请注意绕开限行路段行驶！')
+            }
+          }
+        })
+      }
+      
+    })
+    
+    // 点击提交判断是否可以提交
+  $('button').click(function(e){
+     if(chepai){
+      $('form').submit()
+     }else{
+      e.preventDefault()
+     }
+   })
+
+  })
+</script>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE>
+<html >
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>车位管理系统</title>
+<link rel="stylesheet" type="text/css" href="__STATIC__ /css/index.css" />
+<script src="https://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+</head>
+<body class="bodybg01">
+<div id="content">
+  <table width="100%" class="a01">
+    <tr>
+      <td width="8%" style="text-align:right;">当前位置：</td>
+      <td width="3%">首页</td>
+      <td width="1%">&gt;</td>
+      <td width="6%"><a href="#">管理员管理</a></td>
+      <td width="1%">&gt;</td>
+      <td>管理员操作 </td>
+    </tr>
+  </table>
+  <form action="shanchu" method="post" id="form1"></form>
+  <form action="chaxun" method="post" id="form2"></form>
+  <table width="100%" class="a06" >
+    <tr>
+      <td width="25">&nbsp;</td>
+      <td width="63"></td>
+      <td width="65"><a href="tianjia"><img src="__STATIC__ /images/xinzeng.jpg" alt=" " /></a></td>
+      <td></td>
+      <td width="118">
+        <select name="xuanxiang" form="form2">
+          <option value="1">用户名</option>
+          <option value="2">姓名</option>
+          <option value="3">电话号码</option>
+        </select>
+      </td>
+      <td width="134"><input name="tiaojian" type="text" placeholder="关键字" class="a08" form="form2"/></td>
+      <td width="166"><input type="submit" form="form2" value="搜索"></td>
+    </tr>
+  </table>
+  <div class="shdlr">
+    <table width="100%" class="a08">
+      <tr>
+        <th width="4%"  class="xd">选定</th>
+        <th width="4%">序号</th>
+        <th width="12%">用户名</th>
+        <th width="12%">是否禁用</th>
+        <th width="28%"> 权限管理</th>
+        <th width="23%">入职时间</th>
+        <th width="27%">操作</th>
+      </tr>
+      {volist name='list' id='user'}
+      <tr>
+        <td class="a13 xd" ><input type="checkbox" name="{$i}" value="{$user.id}" form="form1" /></td>
+        <td class="a13" >{$i+($data['page']-1)*5}</td>
+        <td class="a13" >{$user.user}</td>
+        <td class="a13" >
+          {if condition="($user.jinyong==0)"}使用
+          {else /}禁用
+          {/if}
+        </td>
+        <td class="a13">{$user.quanxian}</td>
+        <td class="a13">{$user.zhuche}</td>
+        <td class="a13"><a href="xiugai/id/{$user.id}">修改</a>&nbsp&nbsp|&nbsp&nbsp<a href="shan/id/{$user.id}">删除</a></td>
+      </tr>
+      {/volist}
+    </table>
+<table width="100%" class="qx">
+  <tr>
+    <td width="4%" style="text-align:center;"><span style="font-size:20px;cursor:pointer;">全选</span></td>
+    <td width="4%"><input type="submit" form="form1" value="删除"></td>
+    <td width="32%">&nbsp;</td>
+    <td style="font-size:20px;">
+    {php}
+    $a=($data['page']-1)>0?($data['page']-1):1;
+    $b=($data['page']+1)<$data['zong']?($data['page']+1):$data['zong'];
+    {/php}
+      {if condition="($data['zong']>1)"}
+        <a href="?page={$a}">上一页</a>
+        <a href="?page={$b}">下一页</a>
+        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+        第{$data['page']}页
+        共{$data['zong']}页
+      {/if}
+    </td>
+    </tr>
+</table>
+  </div>
+</div>
+</body>
+<script>
+$(function(){
+  $('span:eq(0)').click(function(){
+    if($('input[type="checkbox"]').prop('checked')){
+      $('input[type="checkbox"]').prop('checked',false);
+    }else{
+      $('input[type="checkbox"]').prop('checked',true);
+    }
+  })
+})
+</script>
+</html>

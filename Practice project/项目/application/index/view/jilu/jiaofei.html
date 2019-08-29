@@ -1,0 +1,139 @@
+<!DOCTYPE>
+<html >
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>车位管理系统</title>
+<link rel="stylesheet" type="text/css" href="__STATIC__ /css/index.css" />
+<script src="https://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+</head>
+<body class="bodybg01">
+<div id="content">
+  <table width="100%" class="a01">
+    <tr>
+      <td width="8%" style="text-align:right;">当前位置：</td>
+      <td width="3%">缴费</td>
+      <td width="1%">&gt;</td>
+      <td width="6%"><a href="#">缴费管理</a></td>
+      <td width="1%">&gt;</td>
+      <td>缴费查看</td>
+    </tr>
+  </table>
+  <tr>
+      
+      <td width="1%">&nbsp;</td>
+      <td width="94%"><strong>生成水记录电表</strong></td>
+  </tr>
+  <table width="100%" class="a06" >
+    <tr>
+      <<td width="25">&nbsp;</td>
+      <td width="63">
+        <select name="qu">
+          {volist name="res" id="vo"}
+          <option value="{$vo.id}">{$vo.name}</option>
+          {/volist}}
+        </select>
+      </td>
+      <td width="65">
+        <select name="danyuan">
+          {volist name="ress" id="vo"}
+          <option value="{$vo.id}">{$vo.name}</option>
+          {/volist}}
+        </select>
+      </td>
+      <td><button id="cha">查看</button></td>
+      <td width="134"></td>
+      <td width="166"></td>
+    </tr>
+  </table>
+  <div class="shdlr">
+    <table width="100%" class="a08">
+      <tr>
+        <th width="25%">住户</th>
+        <th width="25%">缴费项目</th>
+        <th width="25%">上月表数</th>
+        <th width="25%">本月表数</th>
+      </tr>
+    </table>
+<form action="{:url('/jilu/shujucharu')}" method="post">
+<table width="100%" class="qx a08" id="shuidian">
+  <tr>
+  </tr>
+</table>
+</form>
+  </div>
+</div>
+</body>
+<script>
+  $(function(){
+  //选区换单元内容
+  $('select[name=qu]').change(function(){
+    $('#shuidian').find("tr").remove()
+      var opt=$('<tr><td width="25%"></td><td width="25%"></td><td width="25%"></td><td width="25%"></td></tr>')
+    $('#shuidian').append(opt)
+    $.ajax({
+      url:"{:url('/jilu/danyuan')}",
+      type:"post",
+      data:{pid:$('select[name=qu]').val()},
+      dataType:"json",
+      success:function(data){
+        $('select[name=danyuan]').children('option').remove()
+        for(var i=0;i<data.length;i++){
+          var opt=$("<option value='"+data[i]['id']+"'>"+data[i]['name']+"</option>")
+          $("select[name=danyuan]").append(opt)
+        }
+      }
+    })      
+  })
+  //单元变换清除遍历内容
+   $('select[name=danyuan]').change(function(){
+      $('#shuidian').find("tr").remove()
+      var opt=$('<tr><td width="25%"></td><td width="25%"></td><td width="25%"></td><td width="25%"></td></tr>')
+      $('#shuidian').append(opt)
+   })
+  //查询生成水电表
+  $('#cha').click(function(){
+    $.ajax({
+      url:"{:url('/jilu/chashuidian')}",
+      type:"post",
+      data:{qu:$('select[name=qu]').val(),danyuan:$('select[name=danyuan]').val()},
+      dataType:"json",
+      success:function(data){
+        if(data.code==1){
+          //无用户
+          alert('该单元暂无用户入住')
+        }else if(data.code==2){
+          //该单元本月记录已经录入
+          alert('该单元本月记录已经录入')
+        }else{
+          $('#shuidian').find("tr").remove()
+          leng=data.length
+         for(i=0;i<leng;i++){
+          var opt=$("<tr><td width='25%'><input  type='text' value='"+data[i]['dizhi']+"' readonly></td><td width='25%'><input  type='text' value='"+data[i]['xiangmu']+"'readonly></td><td width='25%'><input  type='text' value='"+data[i]['record1']+"'readonly id='record1-'"+i+"' name='record1[]' class='text1'></td><td width='25%'><input  type='text' id='record2-"+i+"' name='record2[]' class='text' required><input  type='hidden' name='vip_id[]' value='"+data[i]['vip_id']+"' required><input  type='hidden' name='xiangmu_id[]' value='"+data[i]['xiangmu_id']+"' required></td></tr>")
+            $('#shuidian').append(opt)
+        }
+        var butto=$("<tr width='90%'><td width='25%'></td><td width='25%'></td><td width='25%'><a><button id='butt'  style='width:166px;height:36px;font-size:20px;background-color:#60A806;color:#fff;border:0px;'>添&nbsp&nbsp&nbsp&nbsp加</button></a></td><td width='25%'></td></tr>")
+          $('#shuidian').append(butto)
+            //失去焦点判断数据是否合法
+          $('input[class=text]').blur(function(){
+            var pd=/^[0-9]{1,7}$/
+            var zhi1=$(this).parent().prev().children('input').val()
+            var zhi2=$(this).val()
+            if(zhi2.match(pd)!=null){
+              if(zhi1>zhi2){
+                $(this).attr('placeholder','请填写正确表数')
+                $(this).val('')
+              }
+            }else{
+              $(this).attr('placeholder','请填写正确表数')
+              $(this).val('')
+            }
+          })
+        }
+      }
+    })  
+  })
+
+
+  })
+</script>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE>
+<html xmlns="http//www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf8" />
+<title>车位管理系统</title>
+<link rel="stylesheet" type="text/css" href="__STATIC__ /css/index.css" />
+</head>
+<body class="bodybg01">
+<div id="content">
+  <table width="100%" class="a01">
+    <tr>
+      <td width="8%" style="text-align:right;">当前位置：</td>
+      <td width="3%">首页</td>
+      <td width="1%">&gt;</td>
+      <td width="5%"><a href="#">分区管理</a></td>
+      <td width="1%">&gt;</td>
+      <td>{$name}查看 </td>
+    </tr>
+  </table>
+  <table width="100%" class="a06" >
+    <tr>
+      <td width="25">&nbsp;</td>
+      <td width="65"><a href="{:url('/types/xztype')}"><img src="__STATIC__ /images/xinzeng.jpg" alt=" " /></a></td>
+      <td width="63"></td>
+      <td></td>
+      <td width="118">&nbsp;</td>
+      <td width="134"></td>
+      <td width="166"></td>
+    </tr>
+  </table>
+  <div class="shdlr">
+    <table width="100%" class="a08">
+      <tr>
+        <th width="5%" ></th>
+        <th width="22%"  class="xd">区域</th>
+        <th width="12%">是否启用</th>
+        <th width="12%">总车位</th>
+        <th width="22%"> 剩余车位</th>
+        <th width="17%">操作</th>
+      </tr>
+      {volist name='cates' id='vo'}
+      <tr>
+        <td class="a13" ></td>
+        <td class="a13 xd" style="text-align:left;"><a href="{:url('/types/ertype',['id'=>$vo.id])}">{$name}{$vo.name}</a></td>
+        <td class="a13" >
+        {if condition="$vo.status==0"}使用
+        {else}停用
+        {/if}
+        </td>
+        <td class="a13" >{$vo.zong}</td>
+        <td class="a13">{$vo.sheng}</td>
+        <td class="a13"><a href="{:url('/types/xiougaier',['id'=>$vo.id])}">修改</a>|<a href="{:url('/types/shanqu',['pid'=>$vo.id])}">删除</a>|<a href="{:url('/types/chewei',['pid'=>$vo.id])}">添加车位</a></td>
+      </tr>
+      {/volist}
+      
+    </table>
+<table width="100%" class="qx">
+  <tr>
+    <td width="4%" style="text-align:center;"></td>
+    <td width="4%"></td>
+    <td width="92%">&nbsp;</td>
+    </tr>
+</table>
+<table width="100%">
+<tr>
+<td width="33%"></td>
+<td></td>
+</tr>
+</table>
+  </div>
+</div>
+</body>
+</html>

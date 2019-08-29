@@ -1,0 +1,116 @@
+﻿<!DOCTYPE >
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<title>车位管理系统</title>
+<link rel="stylesheet" type="text/css" href="__STATIC__ /css/login.css" />
+<script src="https://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+</head>
+<body>
+<div id="wrap">
+  <div id="Login">
+    <div class="box">
+      <p class="a01"><img src="__STATIC__ /images/login01.jpg" alt="代理商管理系统" /></p>
+      <dl>
+        <dt>欢迎使用</dt>
+        <dd>欢迎使用车位管理系统……</dd>
+      </dl>
+      <table width="325" summary="登录页面" class="a02">
+      <form action="denlu" method="post" >
+        <tr>
+          <th width="56">用户名：</th>
+          <td colspan="2"><input name="user" type="text" class="a03" /></td>
+        </tr>
+        <tr>
+          <th>密  &nbsp;码：</th>
+          <td colspan="2"><input name="pwd" type="password" class="a04" /></td>
+        </tr>
+        <tr>
+          <th>验证码：</th>
+          <td colspan="2"><input name="yzm" type="text" class="a05" />
+            <img src="verify" onclick="this.src='verify?tmp='+Math.random()"/>
+          </td>
+        </tr>
+        <tr>
+          <th style="padding-bottom:0;">&nbsp;</th>
+          <td width="27" style="padding-bottom:0;"><input name="" type="checkbox" value="" /></td>
+          <td width="226" style="padding-bottom:0;">在此计算机上保留我的ID信息(?)</td>
+        </tr>
+        <tr>
+          <th style="padding-top:0; padding-bottom:15px;">&nbsp;</th>
+          <td style="padding-top:0; padding-bottom:15px;"><input name="" type="checkbox" value="" /></td>
+          <td style="padding-top:0; padding-bottom:15px;">下次自动登录(?)</td>
+        </tr>
+        <tr>
+          <th>&nbsp;</th>
+          <td></td>
+          <td><a><button style="width:166px;height:36px;font-size:20px;background-color:#60A806;color:#fff;border:0px;">登&nbsp&nbsp&nbsp&nbsp录</button></a></td>
+        </tr>
+        </form>
+      </table>
+    </div>
+    <!-- #main-->
+  </div>
+  <!--container-->
+</div>
+<!--#wrap-->
+
+</body>
+<script>
+$(function(){
+  user=pwd=yzm=false;
+  //判断用户名是否为空
+  $('input[name=user]').blur(function(){
+    $('input[name=user]').next('span').remove();
+    if($(this).val().length>0){
+      user=true;
+    }else{
+      user=false;
+      $("<span>请填写用户名</span>").insertAfter('input[name=user]');
+    }
+  })
+  //判断密码是否为空
+  $('input[name=pwd]').blur(function(){
+    $('input[name=pwd]').next('span').remove();
+    if($(this).val().length>0){
+      pwd=true;
+    }else{
+      pwd=false;
+      $("<span>请填写密码</span>").insertAfter('input[name=pwd]');
+    }
+  })
+  //判断验证码是否正确
+   $('input[name=yzm]').blur(function(){
+    if($(this).val().length>3){
+      $.ajax({
+        url:"/yzm",
+        type:"post",
+        data:{yzm:$('input[name=yzm]').val()},
+        dataType:"json",
+        success:function(data){
+          if(data.code==0){
+            yzm=true;
+          }else{
+            yzm=false;
+          }
+        }
+      })
+    }else{
+      yzm=false;
+      $(this).val('');
+    }
+  })
+   // 点击提交判断是否可以提交
+   $('button').click(function(e){
+     if(user && pwd && yzm){
+      $('form').submit()
+     }else{
+      e.preventDefault()
+     }
+   })
+
+})
+</script>
+</html>

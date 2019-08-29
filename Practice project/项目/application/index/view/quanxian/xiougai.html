@@ -1,0 +1,92 @@
+<!DOCTYPE>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>车位管理系统</title>
+<link rel="stylesheet" type="text/css" href="__STATIC__ /css/index.css" />
+<script src="https://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+</head>
+<body class="bodybg01">
+<div id="content">
+  <table width="100%" class="a01">
+    <tr>
+      <td width="8%" style="text-align:right;">当前位置：</td>
+      <td width="5%">权限管理</td>
+      <td width="1%">&gt;</td>
+      <td width="6%"><a href="#">节点管理</a></td>
+      <td width="1%">&gt;</td>
+      <td>节点新增</td>
+    </tr>
+  </table>
+  <table width="100%" class="a02">
+    <tr>
+      <td width="5%" style="text-align:right;"><img src="__STATIC__ /images/tubiao.jpg" alt=" " /></td>
+      <td width="1%">&nbsp;</td>
+      <td width="94%"><strong>设备分组管理新增</strong></td>
+    </tr>
+  </table>
+  <div class="shdlr">
+  <form action="{:url('/qx/upda')}" method="post">
+    <table width="100%" class="a03">
+	<tr>
+        <td style="text-align:right;">英文名称：</td>
+        <td><input type="text" name="ename" class="a09" required value="{$res.ename}" /></td>
+        <td style="text-align:right;">&nbsp;</td>
+      </tr>
+	<tr>
+        <td style="text-align:right;">中文名称：</td>
+        <td><input type="text" name="cname" class="a09" required value="{$res.cname}" /></td>
+        <td style="text-align:right;">&nbsp;</td>
+      </tr>
+      <input type="hidden" name="id" value="{$res.id}">
+      <input type="hidden" name="yename" value="{$res.ename}">
+      <input type="hidden" name="yzhushi" value="{$res.zhushi}">
+      <input type="hidden" name="ycname" value="{$res.cname}">
+       <tr>
+        <td style="text-align:right;">注释：</td>
+        <td><input type="text" name="zhushi" class="a09" value="{$res.zhushi}" /></td>
+        <td style="text-align:right;">&nbsp;</td>
+      </tr>
+      
+    </table>
+	
+	<table width="100%" style="margin-bottom:20px;">
+      <tr>
+        <td width="15%">&nbsp;</td>
+        <td width="10%"><a><button style="width:166px;height:36px;font-size:20px;background-color:#60A806;color:#fff;border:0px;">修&nbsp&nbsp&nbsp&nbsp改</button></a></td>
+        <td width="10%"><div style="width:166px;height:36px;font-size:20px;background-color:#60A806;color:#fff;border:0px;text-align:center;"><a href="{:url('/qx/jdbl')}">取消返回</a></div></td>
+        <td width="65%">&nbsp;</td>
+      </tr>
+    </table>
+  </form>
+  </div>
+</div>
+</body>
+<script>
+  $(function(){
+    // 点击提交判断节点是否存在
+  $('button').click(function(e){
+    if($('input[name=ename]').val()!='{$res.ename}'){
+     e.preventDefault()
+      $.ajax({
+        url:"{:url('/qx/pdnode')}",
+        type:"post",
+        data:{ename:$('input[name=ename]').val(),pid:$('input[name=pid]').val()},
+        dataType:"json",
+        success:function(data){
+          if(data.code==1){
+            alert('该节点已经存在')
+            e.preventDefault()
+            $('input[name=ename]').val('{$res.ename}')
+          }else{
+            $('form').submit()
+          }
+        }
+      })
+    }      
+  })
+  
+
+  })
+</script>
+</html>
